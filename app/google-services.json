@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "594610769508",
+    "project_id": "sportease-a101e",
+    "storage_bucket": "sportease-a101e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:594610769508:android:93c360c82e68c99e6ed971",
+        "android_client_info": {
+          "package_name": "com.example.sportease"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAly0SJmhmYf-ePYDsXpniAx_wBuqjpxVc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

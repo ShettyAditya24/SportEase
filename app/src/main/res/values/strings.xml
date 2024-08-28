@@ -1,0 +1,13 @@
+<resources>
+
+    <string name="app_name">SportEase</string>
+
+    <string-array name="specializations">
+        <item>Batting Coach</item>
+        <item>Bowling Coach</item>
+        <item>Fielding Coach</item>
+        <item>Fitness Coach</item>
+        <item>Wicketkeeping Coach</item>
+    </string-array>
+
+</resources>

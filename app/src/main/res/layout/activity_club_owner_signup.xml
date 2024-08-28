@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_image"
+    tools:context=".club_owner_signup">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/white"
+                android:elevation="4dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:navigationIcon="@drawable/back_arrow"
+                app:navigationIconTint="@color/black"/>
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="Sign Up"
+                android:textColor="#FA9404"
+                android:textStyle="bold"
+                android:textSize="55sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="374dp"
+                android:layout_height="263dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textView"
+                app:srcCompat="@drawable/signup" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/imageView"
+                android:layout_marginTop="16dp">
+
+                <EditText
+                    android:id="@+id/et_clubname"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/edittext_back"
+                    android:hint="Club Name"
+                    android:inputType="textPersonName"
+                    android:paddingStart="20dp"
+                    android:textColorHint="#464646" />
+
+                <EditText
+                    android:id="@+id/et_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/edittext_back"
+                    android:hint="Address"
+                    android:maxLines="5"
+                    android:scrollbars="vertical"
+                    android:inputType="textPersonName"
+                    android:paddingStart="20dp"
+                    android:textColorHint="#464646" />
+
+                <!-- TextInputLayout for Open Time -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="8dp"
+                    android:hint="Select Open Time"
+                    app:boxBackgroundColor="@drawable/edittext_back"
+                    app:boxStrokeColor="#f2a02b">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/open_time_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:paddingStart="20dp"
+                        android:textColorHint="#464646"
+                        android:onClick="showOpenTimePickerDialog" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- TextInputLayout for Close Time -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="8dp"
+                    android:hint="Select Close Time"
+                    app:boxBackgroundColor="@drawable/edittext_back"
+                    app:boxStrokeColor="#f2a02b">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/close_time_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:paddingStart="20dp"
+                        android:textColorHint="#464646"
+                        android:onClick="showCloseTimePickerDialog" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <EditText
+                    android:id="@+id/et_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/edittext_back"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:paddingStart="20dp"
+                    android:textColorHint="#464646" />
+
+                <EditText
+                    android:id="@+id/et_Pass"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/edittext_back"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:paddingStart="20dp"
+                    android:textColorHint="#464646" />
+
+                <!-- RecyclerView to Display Multiple Selected Images -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="8dp"
+                    android:scrollbars="horizontal" />
+
+                <!-- Button to Trigger Image Upload -->
+                <Button
+                    android:id="@+id/upload_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/back_btn"
+                    android:text="Upload Images"
+                    android:textColor="#f2a02b"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:onClick="selectImages" />
+
+                <Button
+                    android:id="@+id/sign_button"
+                    style="@android:style/Widget.Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/back_btn"
+                    android:text="Sign Up"
+                    android:textColor="#f2a02b"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
