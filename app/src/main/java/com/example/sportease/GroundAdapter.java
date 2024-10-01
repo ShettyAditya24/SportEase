@@ -18,12 +18,21 @@ import java.util.List;
 public class GroundAdapter extends RecyclerView.Adapter<GroundAdapter.GroundViewHolder> {
 
     private static final String TAG = "GroundAdapter";
-    private Context context;
-    private List<Ground> groundList;
+    private final Context context;
+    private final List<Ground> groundList;
+    private OnItemClickListener onItemClickListener;
 
     public GroundAdapter(Context context, List<Ground> groundList) {
         this.context = context;
         this.groundList = groundList;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Ground ground);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
     }
 
     @NonNull
@@ -37,51 +46,59 @@ public class GroundAdapter extends RecyclerView.Adapter<GroundAdapter.GroundView
     public void onBindViewHolder(@NonNull GroundViewHolder holder, int position) {
         Ground ground = groundList.get(position);
 
-        if (ground != null) {
-            String description = ground.getFormattedDescription();
-            holder.groundDescriptionTextView.setText(description);
-            Log.d(TAG, "Binding ground at position " + position + ": " + description);
+        // Set the club name text safely
+        String clubName = ground.getClubName();
+        if (clubName != null && !clubName.isEmpty()) {
+            holder.clubNameTextView.setText(clubName);
+            Log.d(TAG, "Setting club name: " + clubName);
+        } else {
+            Log.e(TAG, "Club name is null or empty at position " + position);
+            holder.clubNameTextView.setText("Unknown Club");
+        }
 
-            // Check if imageUrl is valid before loading with Glide
-            String imageUrl = ground.getImageUrl();
+        // Load the image using Glide
+        List<String> imageUrls = ground.getImageUrls();
+        if (imageUrls != null && !imageUrls.isEmpty()) {
+            String imageUrl = imageUrls.get(0);
             if (imageUrl != null && !imageUrl.isEmpty()) {
+                Log.d(TAG, "Loading image URL: " + imageUrl);
                 Glide.with(context)
                         .load(imageUrl)
-                        .placeholder(R.drawable.ic_placeholder) // Placeholder image
-                        .error(R.drawable.ic_error) // Error image
+                        .placeholder(R.drawable.ic_placeholder)
+                        .error(R.drawable.ic_error)
                         .into(holder.groundImageView);
             } else {
-                // Optionally set a fallback image or do nothing if the URL is invalid
+                Log.d(TAG, "Image URL is null or empty, setting placeholder.");
                 holder.groundImageView.setImageResource(R.drawable.ic_placeholder);
-                Log.d(TAG, "No valid image URL for ground at position: " + position);
             }
         } else {
-            Log.d(TAG, "Ground is null at position: " + position);
+            Log.d(TAG, "No image URL available, setting placeholder.");
+            holder.groundImageView.setImageResource(R.drawable.ic_placeholder);
         }
+
+        // Set the click listener for the item
+        holder.itemView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(ground);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return groundList.size();
+        return groundList != null ? groundList.size() : 0;
     }
 
-    class GroundViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView groundImageView;
-        TextView groundDescriptionTextView;
+    static class GroundViewHolder extends RecyclerView.ViewHolder {
+        final TextView clubNameTextView;
+        final ImageView groundImageView;
 
         public GroundViewHolder(@NonNull View itemView) {
             super(itemView);
-            groundImageView = itemView.findViewById(R.id.groundImageView);
-            groundDescriptionTextView = itemView.findViewById(R.id.groundDescriptionTextView);
 
-            // Set click listener on the image to show/hide the description
-            groundImageView.setOnClickListener(v -> {
-                groundDescriptionTextView.setVisibility(
-                        groundDescriptionTextView.getVisibility() == View.GONE ? View.VISIBLE : View.GONE
-                );
-                Log.d(TAG, "Toggled description visibility for ground at position: " + getAdapterPosition());
-            });
+            // Initialize the views from the layout
+            clubNameTextView = itemView.findViewById(R.id.clubNameTextView);
+            groundImageView = itemView.findViewById(R.id.groundImageView);
         }
     }
 }

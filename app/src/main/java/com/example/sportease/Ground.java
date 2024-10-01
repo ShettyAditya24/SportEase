@@ -1,49 +1,43 @@
 package com.example.sportease;
 
-import android.util.Log;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Ground {
+import java.util.ArrayList;
+import java.util.List;
 
-    private String imageUrl;
+public class Ground implements Parcelable {
     private String clubName;
     private String address;
     private String openTime;
     private String closeTime;
+    private String description;
+    private List<String> imageUrls;
+    private String clubOwnerId; // Added to link ground with its club owner
+    private String groundId; // Added to uniquely identify this ground
 
-    // Parameterized constructor
-    public Ground(String imageUrl, String clubName, String address, String openTime, String closeTime) {
-        this.imageUrl = imageUrl;
-        this.clubName = clubName;
-        this.address = address;
-        this.openTime = openTime;
-        this.closeTime = closeTime;
-        Log.d("GroundClass", "Parameterized constructor called with values: " +
-                "imageUrl=" + imageUrl + ", clubName=" + clubName + ", address=" + address +
-                ", openTime=" + openTime + ", closeTime=" + closeTime);
+    // No-argument constructor for Firestore
+    public Ground() {}
+
+    // Constructor for Parcelable
+    protected Ground(Parcel in) {
+        clubName = in.readString();
+        address = in.readString();
+        openTime = in.readString();
+        closeTime = in.readString();
+        description = in.readString();
+        imageUrls = in.createStringArrayList();
+        clubOwnerId = in.readString(); // Reading clubOwnerId from Parcel
+        groundId = in.readString();    // Reading groundId from Parcel
     }
 
-    // Default constructor required for calls to DataSnapshot.getValue(Ground.class)
-    public Ground() {
-        Log.d("GroundClass", "Default constructor called.");
-    }
-
-    // Getters and setters
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-        Log.d("GroundClass", "Set imageUrl: " + imageUrl);
-    }
-
+    // Getters and setters for all fields
     public String getClubName() {
         return clubName;
     }
 
     public void setClubName(String clubName) {
         this.clubName = clubName;
-        Log.d("GroundClass", "Set clubName: " + clubName);
     }
 
     public String getAddress() {
@@ -52,7 +46,6 @@ public class Ground {
 
     public void setAddress(String address) {
         this.address = address;
-        Log.d("GroundClass", "Set address: " + address);
     }
 
     public String getOpenTime() {
@@ -61,7 +54,6 @@ public class Ground {
 
     public void setOpenTime(String openTime) {
         this.openTime = openTime;
-        Log.d("GroundClass", "Set openTime: " + openTime);
     }
 
     public String getCloseTime() {
@@ -70,16 +62,68 @@ public class Ground {
 
     public void setCloseTime(String closeTime) {
         this.closeTime = closeTime;
-        Log.d("GroundClass", "Set closeTime: " + closeTime);
     }
 
-    // Method to get formatted description
-    public String getFormattedDescription() {
-        String description = "Club Name: " + (clubName != null ? clubName : "N/A") + "\n" +
-                "Address: " + (address != null ? address : "N/A") + "\n" +
-                "Open Time: " + (openTime != null ? openTime : "N/A") + "\n" +
-                "Close Time: " + (closeTime != null ? closeTime : "N/A");
-        Log.d("GroundClass", "Formatted description: " + description);
+    public String getDescription() {
         return description;
     }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
+    }
+
+    public String getClubOwnerId() {
+        return clubOwnerId;
+    }
+
+    public void setClubOwnerId(String clubOwnerId) {
+        this.clubOwnerId = clubOwnerId;
+    }
+
+    public String getGroundId() {
+        return groundId;
+    }
+
+    public void setGroundId(String groundId) {
+        this.groundId = groundId;
+    }
+
+    // Write object data to Parcel
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(clubName);
+        dest.writeString(address);
+        dest.writeString(openTime);
+        dest.writeString(closeTime);
+        dest.writeString(description);
+        dest.writeStringList(imageUrls != null ? imageUrls : new ArrayList<>());
+        dest.writeString(clubOwnerId);
+        dest.writeString(groundId);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    // Parcelable.Creator implementation
+    public static final Creator<Ground> CREATOR = new Creator<Ground>() {
+        @Override
+        public Ground createFromParcel(Parcel in) {
+            return new Ground(in);
+        }
+
+        @Override
+        public Ground[] newArray(int size) {
+            return new Ground[size];
+        }
+    };
 }

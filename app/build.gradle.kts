@@ -1,6 +1,6 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.google.gms.google.services)
+    id("com.android.application")
+    id("com.google.gms.google-services") // Google services plugin for Firebase
 }
 
 android {
@@ -18,7 +18,7 @@ android {
     }
 
     buildTypes {
-        release {
+        getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -26,32 +26,43 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     buildFeatures {
-        viewBinding = true
+        viewBinding = true // Enable view binding for easier UI manipulation
     }
 }
 
 dependencies {
-    implementation(libs.appcompat)
-    implementation(libs.material)
-    implementation(libs.activity)
-    implementation(libs.constraintlayout)
-    implementation(libs.navigation.fragment)
-    implementation(libs.navigation.ui)
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.firestore)
-    implementation(libs.firebase.storage)
-    implementation(libs.firebase.database)
+    // AndroidX and Material dependencies
+    implementation("androidx.appcompat:appcompat:1.6.1")          // Support for backward compatibility
+    implementation("com.google.android.material:material:1.9.0")   // Material design components
+    implementation("androidx.activity:activity-ktx:1.7.2")         // Android activity support
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4") // Constraint layout for flexible UI
 
-    // Glide dependencies
+    // Navigation components for managing fragment navigation
+    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
+    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
+
+    // Firebase dependencies
+    implementation("com.google.firebase:firebase-auth-ktx:23.0.0")    // Firebase Authentication for user management
+    implementation("com.google.firebase:firebase-firestore-ktx:25.1.0") // Firebase Firestore for database storage
+    implementation("com.google.firebase:firebase-storage-ktx:20.2.0")  // Firebase Storage for uploading images/files
+
+    // Glide for efficient image loading and caching
     implementation("com.github.bumptech.glide:glide:4.15.1")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1") // For Java projects
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+    // Testing libraries
+    testImplementation("junit:junit:4.13.2")                // Unit testing
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")  // AndroidX testing
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1") // Espresso for UI testing
+
+    implementation ("org.jetbrains.kotlin:kotlin-stdlib:1.8.10")
+    implementation ("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10")
+    implementation ("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.10")
 }

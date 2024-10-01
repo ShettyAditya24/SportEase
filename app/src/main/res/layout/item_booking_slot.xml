@@ -1,0 +1,50 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <!-- TextView to display booking time slot -->
+    <TextView
+        android:id="@+id/tvSlotTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="10:00 AM - 11:00 AM"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/buttonEditSlot"
+        app:layout_constraintHorizontal_bias="0"
+        android:layout_marginEnd="8dp"/>
+
+    <!-- TextView to display client's name or booking details -->
+    <TextView
+        android:id="@+id/textViewClientName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Client: John Doe"
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintTop_toBottomOf="@id/tvSlotTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/buttonEditSlot"
+        android:paddingTop="4dp"
+        android:layout_marginEnd="8dp"/>
+
+    <!-- Optional button or icon for additional actions (edit, delete) -->
+    <ImageButton
+        android:id="@+id/buttonEditSlot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_edit"
+    android:contentDescription="@string/edit_slot"
+    android:background="?attr/selectableItemBackground"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginEnd="8dp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

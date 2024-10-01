@@ -1,6 +1,8 @@
 <resources>
 
     <string name="app_name">SportEase</string>
+    <string name="edit_slot">Edit Slot</string>
+    <string name="ground_image">Edit Slot</string>
 
     <string-array name="specializations">
         <item>Batting Coach</item>
@@ -9,5 +11,7 @@
         <item>Fitness Coach</item>
         <item>Wicketkeeping Coach</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

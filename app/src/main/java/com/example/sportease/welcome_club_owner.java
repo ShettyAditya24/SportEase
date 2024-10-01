@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.activity.EdgeToEdge;
+//import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class welcome_club_owner extends AppCompatActivity {
@@ -13,7 +13,7 @@ public class welcome_club_owner extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+//        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_welcome_club_owner);
         Button logbutton = findViewById(R.id.button1);
         Button sigbutton = findViewById(R.id.button2);
