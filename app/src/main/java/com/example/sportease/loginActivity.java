@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class loginActivity extends AppCompatActivity {
@@ -73,13 +74,15 @@ public class loginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(loginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                            // You can store additional user data in Firestore if needed
-                            storeUserData(email);
+                            FirebaseUser currentUser = mAuth.getCurrentUser();
+                            if (currentUser != null) {
+                                storeUserData(currentUser.getUid(), email);
+                            }
 
                             // Navigate to the club owner view
-                            Intent intent = new Intent(loginActivity.this,ViewGround.class);
-
+                            Intent intent = new Intent(loginActivity.this, ViewGround.class);
                             startActivity(intent);
+                            finish(); // Call finish() if you don't want to return to this activity
                         } else {
                             Toast.makeText(loginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
                         }
@@ -87,15 +90,16 @@ public class loginActivity extends AppCompatActivity {
                 });
     }
 
-    private void storeUserData(String email) {
-        // Storing user login data in Firestore (optional)
-        db.collection("users").document(email)
+    private void storeUserData(String uid, String email) {
+        // Storing user login data in Firestore
+        db.collection("users").document(uid)
                 .set(new User(email))
                 .addOnSuccessListener(aVoid -> {
                     // Data stored successfully
                 })
                 .addOnFailureListener(e -> {
                     // Failed to store data
+                    Toast.makeText(loginActivity.this, "Error saving user data", Toast.LENGTH_SHORT).show();
                 });
     }
 

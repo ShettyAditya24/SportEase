@@ -2,36 +2,54 @@ package com.example.sportease;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Ground implements Parcelable {
-    private String clubName;
-    private String address;
-    private String openTime;
-    private String closeTime;
-    private String description;
-    private List<String> imageUrls;
-    private String clubOwnerId; // Added to link ground with its club owner
-    private String groundId; // Added to uniquely identify this ground
+    private String clubName;      // Name of the club/ground
+    private String address;        // Address of the ground
+    private String openTime;       // Opening time of the ground
+    private String closeTime;      // Closing time of the ground
+    private List<String> imageUrls; // List of image URLs for the ground
+    private String groundId;       // Unique identifier for the ground
+    private List<String> availableSlots; // List of available slots
 
-    // No-argument constructor for Firestore
+    // Default constructor for Firestore
     public Ground() {}
 
-    // Constructor for Parcelable
+    public Ground(String clubName, String address, String openTime, String closeTime,
+                  List<String> imageUrls, String groundId, List<String> availableSlots) {
+        this.clubName = clubName;
+        this.address = address;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.imageUrls = imageUrls;
+        this.groundId = groundId;
+        this.availableSlots = availableSlots;
+    }
+
     protected Ground(Parcel in) {
         clubName = in.readString();
         address = in.readString();
         openTime = in.readString();
         closeTime = in.readString();
-        description = in.readString();
         imageUrls = in.createStringArrayList();
-        clubOwnerId = in.readString(); // Reading clubOwnerId from Parcel
-        groundId = in.readString();    // Reading groundId from Parcel
+        groundId = in.readString();
+        availableSlots = in.createStringArrayList();
     }
 
-    // Getters and setters for all fields
+    public static final Creator<Ground> CREATOR = new Creator<Ground>() {
+        @Override
+        public Ground createFromParcel(Parcel in) {
+            return new Ground(in);
+        }
+
+        @Override
+        public Ground[] newArray(int size) {
+            return new Ground[size];
+        }
+    };
+
+    // Getters and Setters
     public String getClubName() {
         return clubName;
     }
@@ -64,28 +82,12 @@ public class Ground implements Parcelable {
         this.closeTime = closeTime;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public List<String> getImageUrls() {
         return imageUrls;
     }
 
     public void setImageUrls(List<String> imageUrls) {
         this.imageUrls = imageUrls;
-    }
-
-    public String getClubOwnerId() {
-        return clubOwnerId;
-    }
-
-    public void setClubOwnerId(String clubOwnerId) {
-        this.clubOwnerId = clubOwnerId;
     }
 
     public String getGroundId() {
@@ -96,17 +98,12 @@ public class Ground implements Parcelable {
         this.groundId = groundId;
     }
 
-    // Write object data to Parcel
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(clubName);
-        dest.writeString(address);
-        dest.writeString(openTime);
-        dest.writeString(closeTime);
-        dest.writeString(description);
-        dest.writeStringList(imageUrls != null ? imageUrls : new ArrayList<>());
-        dest.writeString(clubOwnerId);
-        dest.writeString(groundId);
+    public List<String> getAvailableSlots() {
+        return availableSlots;
+    }
+
+    public void setAvailableSlots(List<String> availableSlots) {
+        this.availableSlots = availableSlots;
     }
 
     @Override
@@ -114,16 +111,14 @@ public class Ground implements Parcelable {
         return 0;
     }
 
-    // Parcelable.Creator implementation
-    public static final Creator<Ground> CREATOR = new Creator<Ground>() {
-        @Override
-        public Ground createFromParcel(Parcel in) {
-            return new Ground(in);
-        }
-
-        @Override
-        public Ground[] newArray(int size) {
-            return new Ground[size];
-        }
-    };
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(clubName);
+        dest.writeString(address);
+        dest.writeString(openTime);
+        dest.writeString(closeTime);
+        dest.writeStringList(imageUrls);
+        dest.writeString(groundId);
+        dest.writeStringList(availableSlots);
+    }
 }

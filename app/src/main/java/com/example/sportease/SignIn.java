@@ -3,6 +3,7 @@ package com.example.sportease;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.DocumentReference;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class SignIn extends AppCompatActivity {
 
@@ -93,11 +95,13 @@ public class SignIn extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            // Get the user's UID
                             String userId = mAuth.getCurrentUser().getUid();
 
-                            // Store user information in Firestore
+                            // Store user information in Firestore using the user's UID as the document ID
                             DocumentReference userRef = db.collection("users").document(userId);
                             Map<String, Object> user = new HashMap<>();
+                            user.put("userId", userId); // Store userId from Firebase Authentication
                             user.put("username", username);
                             user.put("lastname", lastname);
                             user.put("email", email);
@@ -111,16 +115,23 @@ public class SignIn extends AppCompatActivity {
                                         startActivity(intent);
                                         finish(); // Close this activity
                                     } else {
-                                        Toast.makeText(SignIn.this, "Failed to store user data", Toast.LENGTH_SHORT).show();
+                                        Exception e = task.getException(); // Get the exception
+                                        if (e != null) {
+                                            Toast.makeText(SignIn.this, "Failed to store user data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                            Log.e("Firestore Error", "Failed to store user data", e); // Log the error
+                                        } else {
+                                            Toast.makeText(SignIn.this, "Failed to store user data", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
                                 }
                             });
                         } else {
-                            Toast.makeText(SignIn.this, "Registration Failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(SignIn.this, "Registration Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
