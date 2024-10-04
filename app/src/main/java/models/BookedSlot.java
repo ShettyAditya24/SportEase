@@ -4,24 +4,22 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class BookedSlot implements Parcelable {
-    private String userId;    // User ID of the person who booked the slot
-    private String groundId;  // ID of the ground for which the slot is booked
-    private String timeSlot;   // The time slot booked
+    private String userId;
+    private String groundId; // Add groundId field
+    private String timeSlot;
 
-    // Empty constructor for Firestore deserialization
-    public BookedSlot() {
-    }
+    // Default constructor required for Firestore
+    public BookedSlot() {}
 
-    // Updated constructor to include groundId
     public BookedSlot(String userId, String groundId, String timeSlot) {
         this.userId = userId;
-        this.groundId = groundId;
+        this.groundId = groundId; // Initialize groundId
         this.timeSlot = timeSlot;
     }
 
     protected BookedSlot(Parcel in) {
         userId = in.readString();
-        groundId = in.readString();
+        groundId = in.readString(); // Read groundId
         timeSlot = in.readString();
     }
 
@@ -37,6 +35,7 @@ public class BookedSlot implements Parcelable {
         }
     };
 
+    // Getters and Setters
     public String getUserId() {
         return userId;
     }
@@ -46,11 +45,11 @@ public class BookedSlot implements Parcelable {
     }
 
     public String getGroundId() {
-        return groundId;
+        return groundId; // Getter for groundId
     }
 
     public void setGroundId(String groundId) {
-        this.groundId = groundId;
+        this.groundId = groundId; // Setter for groundId
     }
 
     public String getTimeSlot() {
@@ -69,7 +68,7 @@ public class BookedSlot implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(userId);
-        dest.writeString(groundId);  // Write groundId to parcel
+        dest.writeString(groundId); // Write groundId
         dest.writeString(timeSlot);
     }
 }

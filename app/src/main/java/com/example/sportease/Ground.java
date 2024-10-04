@@ -10,20 +10,20 @@ public class Ground implements Parcelable {
     private String openTime;       // Opening time of the ground
     private String closeTime;      // Closing time of the ground
     private List<String> imageUrls; // List of image URLs for the ground
-    private String groundId;       // Unique identifier for the ground
+    private String id;       // Unique identifier for the clubownerid
     private List<String> availableSlots; // List of available slots
 
     // Default constructor for Firestore
     public Ground() {}
 
     public Ground(String clubName, String address, String openTime, String closeTime,
-                  List<String> imageUrls, String groundId, List<String> availableSlots) {
+                  List<String> imageUrls, String id, List<String> availableSlots) {
         this.clubName = clubName;
         this.address = address;
         this.openTime = openTime;
         this.closeTime = closeTime;
         this.imageUrls = imageUrls;
-        this.groundId = groundId;
+        this.id = id;
         this.availableSlots = availableSlots;
     }
 
@@ -33,7 +33,7 @@ public class Ground implements Parcelable {
         openTime = in.readString();
         closeTime = in.readString();
         imageUrls = in.createStringArrayList();
-        groundId = in.readString();
+        id = in.readString();
         availableSlots = in.createStringArrayList();
     }
 
@@ -90,12 +90,12 @@ public class Ground implements Parcelable {
         this.imageUrls = imageUrls;
     }
 
-    public String getGroundId() {
-        return groundId;
+    public String getId() {
+        return id;
     }
 
-    public void setGroundId(String groundId) {
-        this.groundId = groundId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public List<String> getAvailableSlots() {
@@ -118,7 +118,7 @@ public class Ground implements Parcelable {
         dest.writeString(openTime);
         dest.writeString(closeTime);
         dest.writeStringList(imageUrls);
-        dest.writeString(groundId);
+        dest.writeString(id);
         dest.writeStringList(availableSlots);
     }
 }

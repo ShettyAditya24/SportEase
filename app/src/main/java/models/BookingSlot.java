@@ -1,14 +1,16 @@
 package models;
 
 public class BookingSlot {
-    private String timeSlot;   // The time slot available for booking
+    private String timeSlot;
+    private String clientName  ;   // The time slot available for booking
 
     // Default constructor for Firestore
     public BookingSlot() {}
 
     // Constructor for creating a new booking slot
-    public BookingSlot(String timeSlot) {
+    public BookingSlot(String timeSlot,String clientName) {
         this.timeSlot = timeSlot;
+        this.clientName = clientName;
     }
 
     // Getters and Setters
@@ -18,5 +20,8 @@ public class BookingSlot {
 
     public void setTimeSlot(String timeSlot) {
         this.timeSlot = timeSlot;
+    }
+    public String getClientName() {
+        return clientName; // Getter for client name
     }
 }

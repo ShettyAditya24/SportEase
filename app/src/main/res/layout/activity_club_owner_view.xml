@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -5,38 +6,61 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
+    <!-- TextView for User Name -->
+
+    <!-- TextView for Uploaded Images Label -->
+    <TextView
+        android:id="@+id/textViewUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text=""
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvUploadedImagesLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Uploaded Images"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/textViewUserName"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <!-- RecyclerView for Uploaded Images -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewUploadedImages"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginBottom="16dp"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tvUploadedImagesLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- TextView for Booking Slots Label -->
-
-    <!-- RecyclerView for Booking Slots -->
     <TextView
         android:id="@+id/tvBookingSlotsLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
+        android:layout_marginTop="8dp"
         android:text="Booking Slots"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/recyclerViewUploadedImages" />
 
+    <!-- RecyclerView for Booking Slots -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewBookingSlots"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@id/tvBookingSlotsLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/fabAddSlot" />
+        app:layout_constraintBottom_toTopOf="@id/fabAddSlot"
+        app:layout_constraintHeight_percent="0.5" /> <!-- Adjust height as needed -->
 
     <!-- FloatingActionButton to Add Slot -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -49,4 +73,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

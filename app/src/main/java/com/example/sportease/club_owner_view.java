@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,15 +18,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import adapters.BookingSlotsAdapter;
 import adapters.UploadedImagesAdapter;
@@ -43,6 +38,7 @@ public class club_owner_view extends AppCompatActivity {
     private List<String> uploadedImagesList;
     private List<BookingSlot> bookingSlotList;
     private CollectionReference clubOwnerRef;
+    private CollectionReference bookedSlotsRef;
     private FloatingActionButton fabAddSlot;
     private String clubOwnerId;
 
@@ -57,6 +53,7 @@ public class club_owner_view extends AppCompatActivity {
 
         if (currentUser != null) {
             clubOwnerId = currentUser.getUid();
+            Log.d(TAG, "Current user ID: " + clubOwnerId);
         } else {
             Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show();
             finish();
@@ -79,14 +76,15 @@ public class club_owner_view extends AppCompatActivity {
         recyclerViewUploadedImages.setAdapter(uploadedImagesAdapter);
         recyclerViewBookingSlots.setAdapter(bookingSlotsAdapter);
 
-        // Reference to Firestore (Assuming club owner data is stored in "clubOwners" collection)
+        // Reference to Firestore
         clubOwnerRef = FirebaseFirestore.getInstance().collection("clubOwners");
+        bookedSlotsRef = FirebaseFirestore.getInstance().collection("bookedSlots"); // Reference to booked slots collection
 
         // Fetch uploaded images from Firestore
         fetchUploadedImages();
 
-        // Fetch booking slots from Firestore
-        fetchBookingSlots();
+        // Fetch booked slots from Firestore
+        fetchBookedSlots();
 
         fabAddSlot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +95,7 @@ public class club_owner_view extends AppCompatActivity {
     }
 
     private void fetchUploadedImages() {
+        Log.d(TAG, "Fetching uploaded images for club owner: " + clubOwnerId);
         clubOwnerRef.document(clubOwnerId)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -109,7 +108,9 @@ public class club_owner_view extends AppCompatActivity {
                                 uploadedImagesList.clear();
                                 uploadedImagesList.addAll(imageUrls);
                                 uploadedImagesAdapter.notifyDataSetChanged();
-                                Log.d(TAG, "Fetched image URLs: " + imageUrls.toString()); // Log the fetched URLs
+                                Log.d(TAG, "Fetched image URLs: " + imageUrls.toString());
+                            } else {
+                                Log.d(TAG, "No image URLs found in document.");
                             }
                         } else {
                             Log.d(TAG, "No such document");
@@ -122,56 +123,37 @@ public class club_owner_view extends AppCompatActivity {
                 });
     }
 
-    private void fetchBookingSlots() {
-        clubOwnerRef.document(clubOwnerId).get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                String openTime = documentSnapshot.getString("openTime");
-                String closeTime = documentSnapshot.getString("closeTime");
+    private void fetchBookedSlots() {
+        Log.d(TAG, "Fetching booked slots for club owner: " + clubOwnerId);
+        // Fetch booked slots for this club owner
+        bookedSlotsRef.whereEqualTo("groundId", clubOwnerId) // Assuming booked slots have clubOwnerId field
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.e(TAG, "Error fetching booked slots", error);
+                            Toast.makeText(club_owner_view.this, "Error loading booked slots", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
-                if (openTime != null && closeTime != null) {
-                    generateTwoHourSlots(openTime, closeTime);
-                }
-            }
-        }).addOnFailureListener(e -> {
-            Log.e(TAG, "Error loading club owner data", e);
-            Toast.makeText(club_owner_view.this, "Error loading club owner data", Toast.LENGTH_SHORT).show();
-        });
-    }
+                        bookingSlotList.clear(); // Clear the current list
+                        if (value != null) {
+                            for (QueryDocumentSnapshot doc : value) {
+                                BookingSlot slot = doc.toObject(BookingSlot.class); // Convert document to BookingSlot
+                                if (slot != null) {
+                                    bookingSlotList.add(slot); // Add each booked slot to the list
+                                }
+                            }
+                        }
 
-    private void generateTwoHourSlots(String openTime, String closeTime) {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        try {
-            Date startTime = sdf.parse(openTime);
-            Date endTime = sdf.parse(closeTime);
-
-            if (startTime != null && endTime != null) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(startTime);
-
-                bookingSlotList.clear();
-
-                while (calendar.getTime().before(endTime)) {
-                    Date slotStart = calendar.getTime();
-                    calendar.add(Calendar.HOUR_OF_DAY, 2);
-                    Date slotEnd = calendar.getTime();
-
-                    if (slotEnd.after(endTime)) {
-                        slotEnd = endTime;
+                        bookingSlotsAdapter.notifyDataSetChanged(); // Notify adapter of data change
+                        Log.d(TAG, "Booked slots fetched: " + bookingSlotList.size() + " slots available.");
                     }
-
-                    String slotText = sdf.format(slotStart) + " - " + sdf.format(slotEnd);
-                    bookingSlotList.add(new BookingSlot(slotText));
-                }
-
-                bookingSlotsAdapter.updateSlots(bookingSlotList); // Update adapter with new slots
-            }
-        } catch (ParseException e) {
-            Log.e(TAG, "Error parsing time", e);
-            Toast.makeText(this, "Error generating booking slots", Toast.LENGTH_SHORT).show();
-        }
+                });
     }
 
     private void addNewBookingSlot() {
         Toast.makeText(this, "Add new slot functionality", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "Add new booking slot clicked.");
     }
 }

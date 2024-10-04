@@ -36,10 +36,12 @@ public class BookingSlotsAdapter extends RecyclerView.Adapter<BookingSlotsAdapte
     @Override
     public void onBindViewHolder(@NonNull SlotViewHolder holder, int position) {
         BookingSlot slot = bookingSlotList.get(position);
-        if (slot != null && slot.getTimeSlot() != null) {
-            holder.tvSlotTime.setText(slot.getTimeSlot());
+        if (slot != null) {
+            holder.tvSlotTime.setText(slot.getTimeSlot() != null ? slot.getTimeSlot() : context.getString(R.string.edit_slot));
+            holder.textViewClientName.setText(slot.getClientName() != null ? slot.getClientName() : ""); // Set client name if available
         } else {
             holder.tvSlotTime.setText(R.string.edit_slot); // Display a default message if slot is null
+            holder.textViewClientName.setText(""); // Clear the client name if the slot is null
         }
     }
 
@@ -60,10 +62,12 @@ public class BookingSlotsAdapter extends RecyclerView.Adapter<BookingSlotsAdapte
 
     static class SlotViewHolder extends RecyclerView.ViewHolder {
         TextView tvSlotTime;
+        TextView textViewClientName; // Add this line to reference the client name TextView
 
         public SlotViewHolder(@NonNull View itemView) {
             super(itemView);
             tvSlotTime = itemView.findViewById(R.id.tvSlotTime);
+            textViewClientName = itemView.findViewById(R.id.textViewClientName); // Initialize client name TextView
         }
     }
 }

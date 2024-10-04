@@ -1,5 +1,6 @@
 package com.example.sportease;
 
+import android.app.usage.NetworkStats;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -174,6 +175,11 @@ public class GroundDetailFragment extends Fragment {
     }
 
     private void bookSlot(String slot) {
+        Log.d(TAG, "Booking slot: " + slot);
+
+
+        Log.d(TAG, "Ground ID: " + ground.getId());
+
         for (BookedSlot bookedSlot : bookedSlots) {
             if (bookedSlot.getTimeSlot().equals(slot)) {
                 Log.d(TAG, "Attempt to book an already booked slot: " + slot);
@@ -190,22 +196,24 @@ public class GroundDetailFragment extends Fragment {
         }
 
         String userId = currentUser.getUid(); // Use actual user ID
-        BookedSlot newBookedSlot = new BookedSlot(userId, ground.getGroundId(), slot); // Pass groundId
+        BookedSlot newBookedSlot = new BookedSlot(userId, ground.getId(), slot); // Pass groundId
         bookedSlots.add(newBookedSlot);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("bookedSlots") // This will create the collection if it doesn't exist
+        db.collection("bookedSlots")
                 .add(newBookedSlot)
                 .addOnSuccessListener(documentReference -> {
                     Log.d(TAG, "Slot booked successfully: " + slot);
                     Toast.makeText(requireContext(), "Slot booked successfully!", Toast.LENGTH_SHORT).show();
-                    refreshSlotsUI(); // Call this to refresh available slots in the UI
+                    refreshSlotsUI();
                 })
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "Failed to book slot: " + slot, e);
                     Toast.makeText(requireContext(), "Failed to book slot.", Toast.LENGTH_SHORT).show();
                 });
     }
+
+
 
     private void refreshSlotsUI() {
         slotsContainer.removeAllViews(); // Clear existing views
@@ -216,20 +224,19 @@ public class GroundDetailFragment extends Fragment {
     private void loadBookedSlotsFromFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("bookedSlots")
-                .whereEqualTo("groundId", ground.getGroundId()) // Ensure groundId matches
+                .whereEqualTo("groundId", ground.getId()) // Ensure groundId matches
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Log.d(TAG, "Booked slots loaded successfully for ground: " + ground.getGroundId());
+                        Log.d(TAG, "Booked slots loaded successfully for ground: " + ground.getId());
                         bookedSlots.clear(); // Clear previous booked slots
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            BookedSlot slot = document.toObject(BookedSlot.class);
-                            bookedSlots.add(slot);
+                            BookedSlot bookedSlot = document.toObject(BookedSlot.class);
+                            bookedSlots.add(bookedSlot);
                         }
-                        refreshSlotsUI(); // Refresh UI with booked slots
+                        refreshSlotsUI(); // Refresh slots after loading bookings
                     } else {
-                        Log.e(TAG, "Failed to load booked slots.");
-                        Toast.makeText(requireContext(), "Failed to load booked slots.", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Failed to load booked slots.", task.getException());
                     }
                 });
     }
