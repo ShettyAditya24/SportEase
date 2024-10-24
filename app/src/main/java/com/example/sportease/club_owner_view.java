@@ -2,14 +2,19 @@ package com.example.sportease;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -62,7 +67,7 @@ public class club_owner_view extends AppCompatActivity {
 
         recyclerViewUploadedImages = findViewById(R.id.recyclerViewUploadedImages);
         recyclerViewBookingSlots = findViewById(R.id.recyclerViewBookingSlots);
-        fabAddSlot = findViewById(R.id.fabAddSlot);
+        BottomNavigationView bottomClubNavigationView = findViewById(R.id.bottomClubNavigationView);
 
         recyclerViewUploadedImages.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerViewBookingSlots.setLayoutManager(new LinearLayoutManager(this));
@@ -86,11 +91,33 @@ public class club_owner_view extends AppCompatActivity {
         // Fetch booked slots from Firestore
         fetchBookedSlots();
 
-        fabAddSlot.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addNewBookingSlot();
+        bottomClubNavigationView.setVisibility(View.VISIBLE); // Ensure it is visible
+
+        bottomClubNavigationView.setOnItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
+
+            // Using if-else statements to handle the bottom navigation selection
+            if (item.getItemId() == R.id.nav_club_tournament) {
+                selectedFragment = new ClubTournamentFragment();
+            } else if (item.getItemId() == R.id.nav_club_profile) {
+                selectedFragment = new ClubProfileFragment();
             }
+
+            if (selectedFragment != null) {
+                // Hide other views
+                recyclerViewUploadedImages.setVisibility(View.GONE);
+                recyclerViewBookingSlots.setVisibility(View.GONE);
+                bottomClubNavigationView.setVisibility(View.GONE);
+                findViewById(R.id.fragment_container).setVisibility(View.VISIBLE); // Show fragment container
+
+                // Load fragment in full screen
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, selectedFragment);
+                transaction.addToBackStack(null); // Allows navigating back to this fragment
+                transaction.commit();
+                return true;
+            }
+            return false;
         });
     }
 
@@ -108,7 +135,7 @@ public class club_owner_view extends AppCompatActivity {
                                 uploadedImagesList.clear();
                                 uploadedImagesList.addAll(imageUrls);
                                 uploadedImagesAdapter.notifyDataSetChanged();
-                                Log.d(TAG, "Fetched image URLs: " + imageUrls.toString());
+                                Log.d(TAG, "Fetched image URLs: " + imageUrls);
                             } else {
                                 Log.d(TAG, "No image URLs found in document.");
                             }
@@ -152,8 +179,23 @@ public class club_owner_view extends AppCompatActivity {
                 });
     }
 
-    private void addNewBookingSlot() {
-        Toast.makeText(this, "Add new slot functionality", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "Add new booking slot clicked.");
+    @Override
+    public void onBackPressed() {
+        // Check if there are any fragments in the back stack
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            // Pop the back stack to go back to the previous fragment
+            getSupportFragmentManager().popBackStack();
+        } else {
+            // If there are no fragments left in the back stack, finish the activity
+            super.onBackPressed();
+        }
+
+        // Show the main views again if no fragments are present
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            recyclerViewUploadedImages.setVisibility(View.VISIBLE);
+            recyclerViewBookingSlots.setVisibility(View.VISIBLE);
+            findViewById(R.id.bottomClubNavigationView).setVisibility(View.VISIBLE); // Show bottom navigation view
+            findViewById(R.id.fragment_container).setVisibility(View.GONE); // Hide the fragment container
+        }
     }
 }

@@ -3,75 +3,59 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <!-- TextView for User Name -->
-
-    <!-- TextView for Uploaded Images Label -->
-    <TextView
-        android:id="@+id/textViewUserName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text=""
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvUploadedImagesLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Uploaded Images"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/textViewUserName"
-        app:layout_constraintStart_toStartOf="parent" />
+    <!-- Fragment Container -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" 
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:background="@android:color/white" /> <!-- Ensure fragment has a background -->
 
     <!-- RecyclerView for Uploaded Images -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewUploadedImages"
         android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/tvUploadedImagesLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <!-- TextView for Booking Slots Label -->
-    <TextView
-        android:id="@+id/tvBookingSlotsLabel"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Booking Slots"
-        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/recyclerViewBookingSlots"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recyclerViewUploadedImages" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="16dp"
+        android:clipToPadding="false"
+        android:scrollbars="vertical" /> <!-- Enable vertical scroll -->
 
     <!-- RecyclerView for Booking Slots -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewBookingSlots"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/tvBookingSlotsLabel"
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewUploadedImages"
+        app:layout_constraintBottom_toTopOf="@id/bottomClubNavigationView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/fabAddSlot"
-        app:layout_constraintHeight_percent="0.5" /> <!-- Adjust height as needed -->
+        android:padding="16dp"
+        android:clipToPadding="false"
+        android:scrollbars="vertical" /> <!-- Enable vertical scroll -->
 
-    <!-- FloatingActionButton to Add Slot -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddSlot"
-        android:layout_width="wrap_content"
+    <!-- Bottom Navigation View -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomClubNavigationView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_add"
-        android:contentDescription="Add Slot"
+        android:background="?android:attr/windowBackground"
+        app:menu="@menu/bottom_nav_club_menu"
+        app:itemIconTint="@color/orange"
+        app:itemTextColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

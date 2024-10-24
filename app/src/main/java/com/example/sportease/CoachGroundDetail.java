@@ -32,7 +32,7 @@ import java.util.Locale;
 
 import models.BookedSlot;
 
-public class GroundDetailFragment extends Fragment {
+public class CoachGroundDetail extends Fragment {
     // UI elements
     private ImageView groundImageView;
     private TextView groundNameTextView, addressTextView, openTimeTextView, closeTimeTextView;
@@ -40,10 +40,10 @@ public class GroundDetailFragment extends Fragment {
     private static final String ARG_GROUND = "ground";
     private Ground ground;
     private List<BookedSlot> bookedSlots = new ArrayList<>();
-    private static final String TAG = "GroundDetailFragment"; // Log tag
+    private static final String TAG = "CoachGroundDetailFragment"; // Log tag
 
-    public static GroundDetailFragment newInstance(Ground ground) {
-        GroundDetailFragment fragment = new GroundDetailFragment();
+    public static CoachGroundDetail newInstance(Ground ground) {
+        CoachGroundDetail fragment = new CoachGroundDetail();
         Bundle args = new Bundle();
         args.putParcelable(ARG_GROUND, ground);
         fragment.setArguments(args);
@@ -65,13 +65,13 @@ public class GroundDetailFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ground_detail, container, false);
-        groundImageView = view.findViewById(R.id.groundImageView);
-        groundNameTextView = view.findViewById(R.id.groundNameTextView);
-        addressTextView = view.findViewById(R.id.addressTextView);
-        openTimeTextView = view.findViewById(R.id.openTimeTextView);
-        closeTimeTextView = view.findViewById(R.id.closeTimeTextView);
-        slotsContainer = view.findViewById(R.id.slotsContainer);
+        View view = inflater.inflate(R.layout.fragment_coach_ground_detail, container, false);
+        groundImageView = view.findViewById(R.id.CoachgroundImageView);
+        groundNameTextView = view.findViewById(R.id.CoachgroundNameTextView);
+        addressTextView = view.findViewById(R.id.CoachaddressTextView);
+        openTimeTextView = view.findViewById(R.id.CoachopenTimeTextView);
+        closeTimeTextView = view.findViewById(R.id.CoachcloseTimeTextView);
+        slotsContainer = view.findViewById(R.id.CoachslotsContainer);
 
         Log.d(TAG, "Ground detail fragment view created.");
         displayGroundDetails();
@@ -195,8 +195,8 @@ public class GroundDetailFragment extends Fragment {
             return;
         }
 
-        String userId = currentUser.getUid(); // Use actual user ID
-        BookedSlot newBookedSlot = new BookedSlot(userId,"users",ground.getId(), slot); // Pass groundId
+        String coachId = currentUser.getUid(); // Use actual user ID
+        BookedSlot newBookedSlot = new BookedSlot(coachId,"coaches", ground.getId(), slot); // Pass groundId
         bookedSlots.add(newBookedSlot);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();

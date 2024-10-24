@@ -235,7 +235,7 @@ public class club_owner_signup extends AppCompatActivity {
         clubOwnerData.put("closeTime", closeTime);
         clubOwnerData.put("imageUrls", uploadedImageUrls);
         clubOwnerData.put("id", uniqueId); // Store the unique ID
-        clubOwnerData.put("groundId", groundId); // Store the ground ID
+//        clubOwnerData.put("groundId", groundId); // Store the ground ID
 
         db.collection("clubOwners")
                 .document(uniqueId)

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@android:color/white"
+    tools:context=".ClubTournamentFragment">
+
+    <!-- TextView for Tournament Name Label -->
+    <TextView
+        android:id="@+id/tvTournamentNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tournament Name"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#f2a02b"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <!-- EditText for Tournament Name -->
+    <EditText
+        android:id="@+id/etTournamentName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Enter tournament name"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray"
+        app:layout_constraintTop_toBottomOf="@id/tvTournamentNameLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:padding="12dp"
+        android:backgroundTint="#f2a02b" />
+
+    <!-- TextView for Tournament Date Label -->
+    <TextView
+        android:id="@+id/tvTournamentDateLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tournament Date"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#f2a02b"
+        app:layout_constraintTop_toBottomOf="@id/etTournamentName"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <!-- Button for Date Picker -->
+    <Button
+        android:id="@+id/btnSelectDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Select Date"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#f2a02b"
+        app:layout_constraintTop_toBottomOf="@id/tvTournamentDateLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:padding="12dp" />
+
+    <!-- TextView for Tournament Time Label -->
+    <TextView
+        android:id="@+id/tvTournamentTimeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tournament Time"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#f2a02b"
+        app:layout_constraintTop_toBottomOf="@id/btnSelectDate"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp" />
+
+    <!-- Button for Time Picker -->
+    <Button
+        android:id="@+id/btnSelectTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Select Time"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#f2a02b"
+        app:layout_constraintTop_toBottomOf="@id/tvTournamentTimeLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:padding="12dp" />
+
+    <!-- Button for Adding Tournament -->
+    <Button
+        android:id="@+id/btnAddTournament"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Tournament"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#f2a02b"
+        app:layout_constraintTop_toBottomOf="@id/btnSelectTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"
+        android:padding="12dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

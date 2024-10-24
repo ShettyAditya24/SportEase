@@ -105,9 +105,10 @@
                     android:layout_marginStart="32dp"
                     android:layout_marginEnd="32dp"
                     android:layout_marginBottom="8dp"
-                    android:hint="Specailization"
+                    android:hint="Specialization"
                     android:paddingStart="20dp"
-                    android:background="@drawable/edittext_back" />
+                    android:background="@drawable/edittext_back"
+                    android:textColorHint="#464646" />
 
                 <!-- Years of Experience -->
                 <EditText
@@ -123,19 +124,6 @@
                     android:paddingStart="20dp"
                     android:textColorHint="#464646" />
 
-                <!-- Certifications -->
-                <EditText
-                    android:id="@+id/et_certifications"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@drawable/edittext_back"
-                    android:hint="Certifications (optional)"
-                    android:paddingStart="20dp"
-                    android:textColorHint="#464646" />
-
                 <!-- Bio -->
                 <EditText
                     android:id="@+id/et_bio"
@@ -148,19 +136,6 @@
                     android:background="@drawable/edittext_back"
                     android:hint="Bio"
                     android:inputType="textMultiLine"
-                    android:paddingStart="20dp"
-                    android:textColorHint="#464646" />
-
-                <!-- Availability -->
-                <EditText
-                    android:id="@+id/et_availability"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="@drawable/edittext_back"
-                    android:hint="Availability"
                     android:paddingStart="20dp"
                     android:textColorHint="#464646" />
 

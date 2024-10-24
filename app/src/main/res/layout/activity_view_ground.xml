@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:background="?android:attr/windowBackground"
         app:itemIconTint="@color/orange"
-        app:itemTextColor="@color/black"
+        app:itemTextColor="@color/white"
         app:menu="@menu/bottom_navigation_menu"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

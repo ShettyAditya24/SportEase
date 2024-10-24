@@ -42,19 +42,23 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")          // Support for backward compatibility
     implementation("com.google.android.material:material:1.9.0")   // Material design components
     implementation("androidx.activity:activity-ktx:1.7.2")         // Android activity support
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4") // Constraint layout for flexible UI
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation ("androidx.recyclerview:recyclerview:1.3.2") // or the latest version
+// Constraint layout for flexible UI
 
     // Navigation components for managing fragment navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
 
     // Firebase dependencies
-    implementation("com.google.firebase:firebase-auth-ktx:23.0.0")    // Firebase Authentication for user management
-    implementation("com.google.firebase:firebase-firestore-ktx:25.1.0") // Firebase Firestore for database storage
-    implementation("com.google.firebase:firebase-storage-ktx:20.2.0")  // Firebase Storage for uploading images/files
+    implementation("com.google.firebase:firebase-auth-ktx:23.1.0")    // Firebase Authentication for user management
+    implementation("com.google.firebase:firebase-firestore-ktx:25.1.1") // Firebase Firestore for database storage
+    implementation("com.google.firebase:firebase-storage-ktx:21.0.1")  // Firebase Storage for uploading images/files
 
     // Glide for efficient image loading and caching
     implementation("com.github.bumptech.glide:glide:4.15.1")
+    implementation(libs.recyclerview)
+    implementation(libs.firebase.auth)
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.1") // For Java projects
 
     // Testing libraries

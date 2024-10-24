@@ -24,13 +24,13 @@
             android:name=".club_owner_view"
             android:exported="false" />
         <activity
-            android:name=".coach_View"
+            android:name=".CoachView"
             android:exported="false" />
         <activity
-            android:name=".coach_signup"
+            android:name=".CoachRegistration"
             android:exported="false" />
         <activity
-            android:name=".coach_login"
+            android:name=".CoachLogin"
             android:exported="false" />
         <activity
             android:name=".welcome_coach"

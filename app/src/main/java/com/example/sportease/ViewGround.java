@@ -38,7 +38,7 @@ public class ViewGround extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_ground); // Ensure this XML has RecyclerView, ProgressBar, and BottomNavigationView
+        setContentView(R.layout.activity_view_ground);
 
         // Initialize Views
         recyclerView = findViewById(R.id.groundRecyclerView);
@@ -46,7 +46,7 @@ public class ViewGround extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         // Initialize Firestore reference
-        groundRef = FirebaseFirestore.getInstance().collection("grounds");
+        groundRef = FirebaseFirestore.getInstance().collection("clubOwners");
 
         // Set up RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -60,21 +60,25 @@ public class ViewGround extends AppCompatActivity {
         fetchGroundData();
 
         // Set click listener for RecyclerView items
-        groundAdapter.setOnItemClickListener(new GroundAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Ground ground) {
-                showGroundDetailFragment(ground);
-            }
-        });
+        groundAdapter.setOnItemClickListener(ground -> showGroundDetailFragment(ground));
 
         // Bottom Navigation Listener
         bottomNavigationView.setOnItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
             int itemId = item.getItemId();
+
             if (itemId == R.id.nav_tournament) {
-                Toast.makeText(ViewGround.this, "Tournaments selected", Toast.LENGTH_SHORT).show();
-                return true;
+                selectedFragment = new UserTournamentFragment(); // Ensure TournamentFragment is implemented
             } else if (itemId == R.id.nav_profile) {
-                Toast.makeText(ViewGround.this, "Profile selected", Toast.LENGTH_SHORT).show();
+                selectedFragment = new UserProfileFragment(); // Ensure ProfileFragment exists
+            }
+
+            if (selectedFragment != null) {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, selectedFragment) // Ensure fragment_container exists in XML
+                        .addToBackStack(null)
+                        .commit();
                 return true;
             }
             return false;
@@ -83,59 +87,49 @@ public class ViewGround extends AppCompatActivity {
 
     // Fetch Ground Data from Firestore
     private void fetchGroundData() {
-        // Ensure the user is authenticated before fetching data
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null) {
             Log.e(TAG, "User is not authenticated");
             Toast.makeText(this, "Please log in to view grounds.", Toast.LENGTH_SHORT).show();
-            return; // Exit if not authenticated
+            return;
         }
 
-        // Initialize Firestore reference
-        CollectionReference groundRef = FirebaseFirestore.getInstance().collection("clubOwners");
-
         // Start fetching data
-        groundRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                progressBar.setVisibility(View.GONE); // Hide the progress bar after fetching data
+        groundRef.addSnapshotListener((queryDocumentSnapshots, e) -> {
+            progressBar.setVisibility(View.GONE); // Hide the progress bar
 
-                if (e != null) {
-                    Log.e(TAG, "Failed to load data.", e); // Log error if there's an issue
-                    Toast.makeText(ViewGround.this, "Failed to load data. Please try again.", Toast.LENGTH_SHORT).show();
-                    return; // Exit if there was an error
-                }
+            if (e != null) {
+                Log.e(TAG, "Failed to load data.", e);
+                Toast.makeText(ViewGround.this, "Failed to load data. Please try again.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
-                    Log.d(TAG, "DocumentSnapshot count: " + queryDocumentSnapshots.size());
-                    groundList.clear(); // Clear existing data in the list
+            if (queryDocumentSnapshots != null && !queryDocumentSnapshots.isEmpty()) {
+                groundList.clear();
 
-                    // Loop through each document in the query result
-                    for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        Ground ground = snapshot.toObject(Ground.class); // Convert document to Ground object
-                        if (ground != null) {
-                            Log.d(TAG, "Ground loaded: " + ground.getClubName());
-                            groundList.add(ground); // Add the ground to the list
-                        } else {
-                            Log.d(TAG, "Ground is null for document: " + snapshot.getId());
-                        }
+                // Loop through documents and add to the list
+                for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                    Ground ground = snapshot.toObject(Ground.class);
+                    if (ground != null) {
+                        groundList.add(ground);
+                    } else {
+                        Log.d(TAG, "Ground is null for document: " + snapshot.getId());
                     }
-                    groundAdapter.notifyDataSetChanged(); // Notify adapter of data changes
-                } else {
-                    Log.d(TAG, "No data available");
-                    Toast.makeText(ViewGround.this, "No grounds available.", Toast.LENGTH_SHORT).show(); // Inform user
                 }
+                groundAdapter.notifyDataSetChanged();
+            } else {
+                Toast.makeText(ViewGround.this, "No grounds available.", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-
+    // Show Ground Detail Fragment
     private void showGroundDetailFragment(Ground ground) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = GroundDetailFragment.newInstance(ground); // Pass necessary parameters
+        Fragment fragment = GroundDetailFragment.newInstance(ground); // Ensure GroundDetailFragment is implemented
         fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment) // Ensure fragment_container exists in your layout
-                .addToBackStack(null) // Add this transaction to the back stack
+                .replace(R.id.fragment_container, fragment) // Ensure fragment_container exists in XML
+                .addToBackStack(null)
                 .commit();
     }
 }

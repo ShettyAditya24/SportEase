@@ -34,13 +34,13 @@ public class Welcome_page extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-//        coach_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent =new Intent(Welcome_page.this, welcome_coach.class);
-//                startActivity(intent);
-//            }
-//        });
+        coach_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent =new Intent(Welcome_page.this, welcome_coach.class);
+                startActivity(intent);
+            }
+        });
 
 
     }
