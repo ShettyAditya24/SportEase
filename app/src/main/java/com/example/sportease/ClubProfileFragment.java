@@ -2,6 +2,7 @@ package com.example.sportease;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -27,6 +28,7 @@ public class ClubProfileFragment extends Fragment {
     private TextView tvClubOwnerEmail;
     private Button btnEditProfile;
     private Button btnLogout;
+    private Button btnViewExpenseChart;
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
@@ -48,9 +50,18 @@ public class ClubProfileFragment extends Fragment {
         tvClubOwnerEmail = view.findViewById(R.id.tvClubOwnerEmail);
         btnEditProfile = view.findViewById(R.id.btnEditProfile);
         btnLogout = view.findViewById(R.id.btnLogout);
+        btnViewExpenseChart=view.findViewById(R.id.btnViewExpenseChart);
 
         // Load club owner's information
         loadClubOwnerInfo();
+        btnViewExpenseChart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity()  , ExpenseActivity.class);
+                startActivity(intent);
+
+            }
+        });
 
         // Edit Profile button click listener
         btnEditProfile.setOnClickListener(new View.OnClickListener() {

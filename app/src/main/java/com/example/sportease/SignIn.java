@@ -19,12 +19,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class SignIn extends AppCompatActivity {
 
@@ -52,8 +52,8 @@ public class SignIn extends AppCompatActivity {
         etLastname = findViewById(R.id.et_rpass);
         btnSignup = findViewById(R.id.sign_button);
 
-        mAuth = FirebaseAuth.getInstance(); // Initialize FirebaseAuth
-        db = FirebaseFirestore.getInstance(); // Initialize Firestore
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,49 +89,69 @@ public class SignIn extends AppCompatActivity {
             return;
         }
 
-        // Create a new user with Firebase Authentication
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Get the user's UID
-                            String userId = mAuth.getCurrentUser().getUid();
-
-                            // Store user information in Firestore using the user's UID as the document ID
-                            DocumentReference userRef = db.collection("users").document(userId);
-                            Map<String, Object> user = new HashMap<>();
-                            user.put("userId", userId); // Store userId from Firebase Authentication
-                            user.put("username", username);
-                            user.put("lastname", lastname);
-                            user.put("email", email);
-
-                            userRef.set(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(SignIn.this, "Registration Successful", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(SignIn.this, loginActivity.class);
-                                        startActivity(intent);
-                                        finish(); // Close this activity
-                                    } else {
-                                        Exception e = task.getException(); // Get the exception
-                                        if (e != null) {
-                                            Toast.makeText(SignIn.this, "Failed to store user data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                                            Log.e("Firestore Error", "Failed to store user data", e); // Log the error
-                                        } else {
-                                            Toast.makeText(SignIn.this, "Failed to store user data", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                }
-                            });
+                            saveUserData(username, lastname, email);
                         } else {
-                            Toast.makeText(SignIn.this, "Registration Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            handleAuthError(task.getException());
                         }
                     }
                 });
     }
 
+    private void saveUserData(String username, String lastname, String email) {
+        String userId = mAuth.getCurrentUser().getUid();
+
+        DocumentReference userRef = db.collection("users").document(userId);
+
+        // Prepare user data
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("userId", userId);
+        userData.put("username", username);
+        userData.put("lastname", lastname);
+        userData.put("email", email);
+
+        // Merge data without overwriting the document
+        userRef.set(userData, SetOptions.merge())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(SignIn.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                            navigateToLogin();
+                        } else {
+                            handleFirestoreError(task.getException());
+                        }
+                    }
+                });
+    }
+
+    private void navigateToLogin() {
+        Intent intent = new Intent(SignIn.this, loginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void handleAuthError(Exception e) {
+        if (e != null) {
+            Toast.makeText(SignIn.this, "Registration Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e("Auth Error", "Registration failed", e);
+        } else {
+            Toast.makeText(SignIn.this, "Registration Failed", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void handleFirestoreError(Exception e) {
+        if (e != null) {
+            Toast.makeText(SignIn.this, "Failed to store user data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.e("Firestore Error", "Failed to store user data", e);
+        } else {
+            Toast.makeText(SignIn.this, "Failed to store user data", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

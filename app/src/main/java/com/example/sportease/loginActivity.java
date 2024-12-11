@@ -18,7 +18,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class loginActivity extends AppCompatActivity {
 
@@ -76,13 +81,13 @@ public class loginActivity extends AppCompatActivity {
                             Toast.makeText(loginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
                             FirebaseUser currentUser = mAuth.getCurrentUser();
                             if (currentUser != null) {
-                                storeUserData(currentUser.getUid(), email);
+                                updateUserInFirestore(currentUser.getUid(), email);
                             }
 
                             // Navigate to the club owner view
                             Intent intent = new Intent(loginActivity.this, ViewGround.class);
                             startActivity(intent);
-                            finish(); // Call finish() if you don't want to return to this activity
+                            finish();
                         } else {
                             Toast.makeText(loginActivity.this, "Invalid Credentials", Toast.LENGTH_SHORT).show();
                         }
@@ -90,33 +95,61 @@ public class loginActivity extends AppCompatActivity {
                 });
     }
 
-    private void storeUserData(String uid, String email) {
-        // Storing user login data in Firestore
-        db.collection("users").document(uid)
-                .set(new User(email))
-                .addOnSuccessListener(aVoid -> {
-                    // Data stored successfully
-                })
-                .addOnFailureListener(e -> {
-                    // Failed to store data
-                    Toast.makeText(loginActivity.this, "Error saving user data", Toast.LENGTH_SHORT).show();
+    private void updateUserInFirestore(String uid, String email) {
+        // Fetch the existing user data to avoid overwriting important fields
+        db.collection("users").document(uid).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            // Merge only the email without overwriting other fields
+                            Map<String, Object> updatedData = new HashMap<>();
+                            updatedData.put("email", email); // Only add/merge the email field
+
+                            db.collection("users").document(uid)
+                                    .set(updatedData, SetOptions.merge()) // Use merge to retain other fields
+                                    .addOnSuccessListener(aVoid -> {
+                                        // Data updated successfully
+                                        Toast.makeText(loginActivity.this, "User data updated", Toast.LENGTH_SHORT).show();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(loginActivity.this, "Error updating user data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+                        } else {
+                            // Document doesn't exist, create a new one with necessary fields
+                            createUserInFirestore(uid, email);
+                        }
+                    } else {
+                        Toast.makeText(loginActivity.this, "Error fetching user data", Toast.LENGTH_SHORT).show();
+                    }
                 });
     }
 
+    private void createUserInFirestore(String uid, String email) {
+        // Create a new user with all necessary fields
+        Map<String, Object> newUser = new HashMap<>();
+        newUser.put("email", email);
+        newUser.put("username", "");  // Initialize with empty or default values
+        newUser.put("lastname", "");
+        newUser.put("userid", uid);
+
+        db.collection("users").document(uid)
+                .set(newUser)
+                .addOnSuccessListener(aVoid -> {
+                    // User created successfully
+                    Toast.makeText(loginActivity.this, "New user created", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(loginActivity.this, "Error creating user: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    // User class to define the user object
-    public static class User {
-        public String email;
-
-        public User(String email) {
-            this.email = email;
-        }
     }
 }

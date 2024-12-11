@@ -99,7 +99,10 @@ public class club_owner_view extends AppCompatActivity {
             // Using if-else statements to handle the bottom navigation selection
             if (item.getItemId() == R.id.nav_club_tournament) {
                 selectedFragment = new ClubTournamentFragment();
-            } else if (item.getItemId() == R.id.nav_club_profile) {
+            }else if (item.getItemId() == R.id.nav_club_coach) {
+                selectedFragment = new ClubCoachFragment();
+            }
+            else if (item.getItemId() == R.id.nav_club_profile) {
                 selectedFragment = new ClubProfileFragment();
             }
 

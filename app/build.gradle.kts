@@ -59,6 +59,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.15.1")
     implementation(libs.recyclerview)
     implementation(libs.firebase.auth)
+    implementation(libs.activity)
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.1") // For Java projects
 
     // Testing libraries

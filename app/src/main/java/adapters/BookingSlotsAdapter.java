@@ -1,73 +1,68 @@
 package adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sportease.R;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import models.BookingSlot;
 
-public class BookingSlotsAdapter extends RecyclerView.Adapter<BookingSlotsAdapter.SlotViewHolder> {
+public class BookingSlotsAdapter extends RecyclerView.Adapter<BookingSlotsAdapter.ViewHolder> {
 
-    private final Context context;
-    private List<BookingSlot> bookingSlotList;
+    private List<BookingSlot> bookingSlots;
+    private Context context;
 
-    public BookingSlotsAdapter(Context context, List<BookingSlot> bookingSlotList) {
+    public BookingSlotsAdapter(Context context, List<BookingSlot> bookingSlots) {
         this.context = context;
-        this.bookingSlotList = bookingSlotList != null ? bookingSlotList : new ArrayList<>(); // Ensures a non-null list
+        this.bookingSlots = bookingSlots;
     }
 
     @NonNull
     @Override
-    public SlotViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_booking_slot, parent, false);
-        return new SlotViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SlotViewHolder holder, int position) {
-        BookingSlot slot = bookingSlotList.get(position);
-        if (slot != null) {
-            holder.tvSlotTime.setText(slot.getTimeSlot() != null ? slot.getTimeSlot() : context.getString(R.string.edit_slot));
-            holder.textViewClientName.setText(slot.getClientName() != null ? slot.getClientName() : ""); // Set client name if available
-        } else {
-            holder.tvSlotTime.setText(R.string.edit_slot); // Display a default message if slot is null
-            holder.textViewClientName.setText(""); // Clear the client name if the slot is null
-        }
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        BookingSlot slot = bookingSlots.get(position);
+
+        // Log for debugging
+        Log.d("BookingSlotsAdapter", "Binding slot: " + slot.getTimeSlot() + ", Coach: " + slot.getCoachName());
+
+        holder.tvSlotTime.setText(slot.getTimeSlot());
+        holder.textViewCoachName.setText(slot.getCoachName());
+
+        // Optional: If you have a client name to display
+        // holder.textViewClientName.setText(slot.getClientName());
     }
 
     @Override
     public int getItemCount() {
-        return bookingSlotList != null ? bookingSlotList.size() : 0;
+        return bookingSlots.size();
     }
 
-    public void updateSlots(List<BookingSlot> newSlotList) {
-        if (newSlotList != null) {
-            bookingSlotList.clear();
-            bookingSlotList.addAll(newSlotList); // Add all new slots to the existing list
-        } else {
-            bookingSlotList.clear(); // Clear the list if new data is null
-        }
-        notifyDataSetChanged(); // Notify adapter to refresh data
+    public void updateSlots(List<BookingSlot> newSlots) {
+        this.bookingSlots = newSlots;
+        notifyDataSetChanged();
     }
 
-    static class SlotViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvSlotTime;
-        TextView textViewClientName; // Add this line to reference the client name TextView
+        TextView textViewCoachName;
 
-        public SlotViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvSlotTime = itemView.findViewById(R.id.tvSlotTime);
-            textViewClientName = itemView.findViewById(R.id.textViewClientName); // Initialize client name TextView
+            textViewCoachName = itemView.findViewById(R.id.textViewCoachName);
         }
     }
 }

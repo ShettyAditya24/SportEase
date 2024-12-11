@@ -4,6 +4,10 @@
         android:title="Tournament"
         android:icon="@drawable/ic_tournament" />
     <item
+        android:id="@+id/nav_club_coach"
+        android:title="Coach"
+        android:icon="@drawable/ic_person" />
+    <item
         android:id="@+id/nav_club_profile"
         android:title="Profile"
         android:icon="@drawable/ic_person" />

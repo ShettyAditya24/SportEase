@@ -7,7 +7,7 @@ public class BookedSlot implements Parcelable {
     private String id;         // Store either userId or coachId
     private String bookedBy;   // Indicates whether the booking was made by "user" or "coach"
     private String groundId;   // Ground ID field
-    private String timeSlot;   // Booked time slot
+    private String timeSlot;
 
     // Default constructor required for Firestore
     public BookedSlot() {}
@@ -16,7 +16,8 @@ public class BookedSlot implements Parcelable {
         this.id = id;                     // Initialize ID
         this.bookedBy = bookedBy;         // Initialize bookedBy
         this.groundId = groundId;         // Initialize groundId
-        this.timeSlot = timeSlot;         // Initialize timeSlot
+        this.timeSlot = timeSlot;
+      // Initialize timeSlot
     }
 
     protected BookedSlot(Parcel in) {
@@ -66,6 +67,7 @@ public class BookedSlot implements Parcelable {
     public String getTimeSlot() {
         return timeSlot;  // Getter for timeSlot
     }
+
 
     public void setTimeSlot(String timeSlot) {
         this.timeSlot = timeSlot;  // Setter for timeSlot

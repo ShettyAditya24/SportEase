@@ -48,9 +48,10 @@ public class CoachView extends AppCompatActivity {
                 Fragment selectedFragment = null;
 
                 // Fragment selection using if-else
-                if (item.getItemId() == R.id.nav_coach_tournament) {
-                    selectedFragment = new CoachTournamentFragment();
-                } else if (item.getItemId() == R.id.nav_coach_profile) {
+//                if (item.getItemId() == R.id.nav_coach_tournament) {
+//                    selectedFragment = new CoachTournamentFragment();
+//            }
+                  if (item.getItemId() == R.id.nav_coach_profile) {
                     selectedFragment = new CoachProfileFragment();
                 }
 

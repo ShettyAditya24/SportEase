@@ -67,10 +67,13 @@ public class ViewGround extends AppCompatActivity {
             Fragment selectedFragment = null;
             int itemId = item.getItemId();
 
+            // Use if-else to determine which fragment to display
             if (itemId == R.id.nav_tournament) {
-                selectedFragment = new UserTournamentFragment(); // Ensure TournamentFragment is implemented
+                selectedFragment = new UserTournamentFragment();
             } else if (itemId == R.id.nav_profile) {
-                selectedFragment = new UserProfileFragment(); // Ensure ProfileFragment exists
+                selectedFragment = new UserProfileFragment();
+            } else if (itemId == R.id.nav_coach) {
+                selectedFragment = new UserCoachFragment(); // Ensure this is correct
             }
 
             if (selectedFragment != null) {
@@ -83,6 +86,8 @@ public class ViewGround extends AppCompatActivity {
             }
             return false;
         });
+
+
     }
 
     // Fetch Ground Data from Firestore
@@ -131,5 +136,10 @@ public class ViewGround extends AppCompatActivity {
                 .replace(R.id.fragment_container, fragment) // Ensure fragment_container exists in XML
                 .addToBackStack(null)
                 .commit();
+
+        // Fetch the coach ID based on bookedBy field
+
     }
+
+
 }
