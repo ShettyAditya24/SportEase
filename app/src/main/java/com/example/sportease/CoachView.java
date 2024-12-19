@@ -10,12 +10,18 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import Fragments.CoachProfileFragment;
+import Fragments.CoachTournamentFragment;
+import adapters.GroundAdapter;
+import models.Ground;
 
 public class CoachView extends AppCompatActivity {
 
@@ -47,8 +53,8 @@ public class CoachView extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Fragment selectedFragment = null;
 
-                // Fragment selection using if-else
-//                if (item.getItemId() == R.id.nav_coach_tournament) {
+//                 Fragment selection using if-else
+//                if (item.getItemId() == R.id.nav_coach_tourna) {
 //                    selectedFragment = new CoachTournamentFragment();
 //            }
                   if (item.getItemId() == R.id.nav_coach_profile) {

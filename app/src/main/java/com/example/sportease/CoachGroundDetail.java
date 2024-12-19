@@ -1,6 +1,5 @@
 package com.example.sportease;
 
-import android.app.usage.NetworkStats;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,6 +30,7 @@ import java.util.List;
 import java.util.Locale;
 
 import models.BookedSlot;
+import models.Ground;
 
 public class CoachGroundDetail extends Fragment {
     // UI elements

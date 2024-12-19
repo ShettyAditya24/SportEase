@@ -2,17 +2,16 @@ package com.example.sportease;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,6 +28,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import Fragments.ClubCoachFragment;
+import Fragments.ClubProfileFragment;
+import Fragments.ClubTournamentFragment;
 import adapters.BookingSlotsAdapter;
 import adapters.UploadedImagesAdapter;
 import models.BookingSlot;
@@ -105,6 +107,7 @@ public class club_owner_view extends AppCompatActivity {
             else if (item.getItemId() == R.id.nav_club_profile) {
                 selectedFragment = new ClubProfileFragment();
             }
+
 
             if (selectedFragment != null) {
                 // Hide other views

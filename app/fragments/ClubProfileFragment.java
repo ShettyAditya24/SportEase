@@ -1,4 +1,4 @@
-package com.example.sportease;
+package com.example.sportease.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -18,6 +18,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.sportease.ExpenseActivity;
+import com.example.sportease.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 

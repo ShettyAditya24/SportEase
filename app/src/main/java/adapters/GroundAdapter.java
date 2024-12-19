@@ -1,4 +1,4 @@
-package com.example.sportease;
+package adapters;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import models.Ground;
+import com.example.sportease.R;
 
 import java.util.List;
 

@@ -1,10 +1,12 @@
 package com.example.sportease;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,6 +30,7 @@ public class CoachRegistration extends AppCompatActivity {
     private Button signButton;
     private FirebaseAuth mAuth;
     private FirebaseFirestore firestore;
+    private TextView tvLoginLink;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,8 @@ public class CoachRegistration extends AppCompatActivity {
         etExperience = findViewById(R.id.et_experience);
         etBio = findViewById(R.id.et_bio);
         signButton = findViewById(R.id.sign_button);
+        tvLoginLink = findViewById(R.id.tvLoginLink);
+
 
         // Set click listener for Signup button
         signButton.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +60,18 @@ public class CoachRegistration extends AppCompatActivity {
                 registerCoach();
             }
         });
+
+        tvLoginLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to LoginActivity
+                Intent intent = new Intent(CoachRegistration.this, CoachLogin.class);
+                startActivity(intent);
+            }
+        });
+
     }
+
 
     private void registerCoach() {
         // Retrieve user input from EditTexts
